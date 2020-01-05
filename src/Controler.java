@@ -1,5 +1,12 @@
 public class Controler {
+    private MainGame game;
 
+    public Controler(){
+
+    }
+    public void setMainGame(MainGame game){
+
+    }
     public void signalStopTimer() {
         // TODO - implement Controler.signalStopTimer
         throw new UnsupportedOperationException();
@@ -11,6 +18,7 @@ public class Controler {
      */
     public void checkSeq(int Color) {
         // TODO - implement Controler.checkSeq
+
         throw new UnsupportedOperationException();
     }
 
