@@ -16,10 +16,6 @@ public class Controler {
     public void setModel(Model model){
         this.model = model;
     }
-    /**
-     *
-     * @param color
-     */
     public void checkSeq(Color color) {
         //stop timer
 
@@ -36,8 +32,8 @@ public class Controler {
             //dereferences game instance
         }
     }
-    public void sendName(String name) {
-
+    public void sendData(String name) {
+        model.recordData(name,getScores());
     }
 
     public int getScores() {
