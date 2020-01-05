@@ -1,62 +1,52 @@
+import java.awt.*;
+import java.util.ArrayList;
 public class MainGame {
 
     private int score;
-    private int initSize;
-    private int TimeOut;
-    private int VitessSeq;
-
-    /**
-     *
-     * @param seq
-     * @param timeout
-     */
-    public void initGame(ColorSeq seq, int timeout) {
-        // TODO - implement MainGame.initGame
-        throw new UnsupportedOperationException();
+    private ArrayList<Color> colorSeq;
+    private int currIndex;
+    private Controler ctrl;
+    public MainGame(int size) {
+        currIndex = 0;
+        colorSeq = new ArrayList<>();
+        createSequence(size);
     }
 
-    public ColorSeq createSequence() {
-        // TODO - implement MainGame.createSequence
-        throw new UnsupportedOperationException();
+    private void createSequence (int size) {
+        for (int i = 0; i <size ; i++) {
+            addToColorSeq();
+        }
+    }
+    private void addToColorSeq(){
+        int rand = (int)(Math.random() * (3 - 0 +1)) + 0;
+        if(rand == 0)colorSeq.add(Color.BLUE);
+        if(rand == 1)colorSeq.add(Color.YELLOW);
+        if(rand == 2)colorSeq.add(Color.RED);
+        if(rand == 3)colorSeq.add(Color.GREEN);
     }
 
-    public void startTimer() {
-        // TODO - implement MainGame.startTimer
-        throw new UnsupportedOperationException();
-    }
-
-    public void stopTimer() {
-        // TODO - implement MainGame.stopTimer
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     *
-     * @param color
-     */
     public boolean checkCurrSeq(Color color) {
-        // TODO - implement MainGame.checkCurrSeq
-        throw new UnsupportedOperationException();
+        boolean ret =  color.equals(colorSeq.get(currIndex));
+        if(currIndex == colorSeq.size()){
+            incrementScore();
+            currIndex=0;
+        }
+        return ret;
     }
 
-    public void incrementScore() {
-        // TODO - implement MainGame.incrementScore
-        throw new UnsupportedOperationException();
+    private void incrementScore() {
+        score++;
     }
+    public void incrementCurrIndex(){
+        currIndex++;
+    }
+
 
     public int getScore() {
         return this.score;
     }
 
-    /**
-     *
-     * @param initSize
-     * @param TimeOut
-     * @param VitessSeq
-     */
-    public boolean appliqueModification(int initSize, int TimeOut, int VitessSeq) {
-        // TODO - implement MainGame.appliqueModification
-        throw new UnsupportedOperationException();
+    public void setCtrl(Controler controler){
+        this.ctrl = controler;
     }
-
 }

@@ -1,5 +1,5 @@
 public class View {
-
+    private Controler ctrl;
     /**
      *
      * @param ColorSeq
@@ -40,5 +40,7 @@ public class View {
         // TODO - implement View.displayScores
         throw new UnsupportedOperationException();
     }
-
+    public void setCtrl(Controler ctrl){
+        this.ctrl = ctrl;
+    }
 }

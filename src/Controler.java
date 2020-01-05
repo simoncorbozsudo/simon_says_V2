@@ -1,42 +1,41 @@
+import java.awt.*;
+
 public class Controler {
-
-    public void signalStopTimer() {
-        // TODO - implement Controler.signalStopTimer
-        throw new UnsupportedOperationException();
+    private MainGame game;
+    private View view;
+    private Model model;
+    private GameTimer gTimer;
+    public void setView(View view){
+        this.view = view;
+    }
+    public void setModel(Model model){
+        this.model = model;
     }
 
-    /**
-     *
-     * @param Color
-     */
-    public void checkSeq(int Color) {
-        // TODO - implement Controler.checkSeq
-        throw new UnsupportedOperationException();
+    public void startGame(int timeout, int size) {
+        //called when player hits start
+        game = new MainGame(size);
+        gTimer = new GameTimer(timeout);
+        //view.switchToDisplay
+        //view.
     }
-
-    /**
-     *
-     * @param String
-     */
-    public void sendName(int String) {
-        // TODO - implement Controler.sendName
-        throw new UnsupportedOperationException();
+    public void checkSeq(Color color) {
+        //stop timer
+        gTimer.cancelTimer();
+        if(this.game.checkCurrSeq(color)){
+            this.game.incrementCurrIndex();
+        }else{
+           stopGame();
+        }
     }
-
-    /**
-     *
-     * @param initSize
-     * @param TimeOut
-     * @param VitessSeq
-     */
-    public boolean appliqueModification(int initSize, int TimeOut, int VitessSeq) {
-        // TODO - implement Controler.appliqueModification
-        throw new UnsupportedOperationException();
+    public void sendData(String name) {
+        model.recordData(name,getScores());
     }
 
     public int getScores() {
-        // TODO - implement Controler.getScores
-        throw new UnsupportedOperationException();
+        return game.getScore();
     }
+    public void stopGame(){
 
+    }
 }
