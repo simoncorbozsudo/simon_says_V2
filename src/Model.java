@@ -6,7 +6,7 @@ public class Model {
      * @param score
      */
     public void recordData(String name, int score) {
-        
+        //database query here
     }
     public void setCtrl(Controler ctrl){
         this.ctrl = ctrl;

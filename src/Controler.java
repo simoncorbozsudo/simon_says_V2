@@ -1,35 +1,31 @@
 import java.awt.*;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Controler {
     private MainGame game;
     private View view;
     private Model model;
-    public void setMainGame(MainGame game){
-        //called when user clicks on start
-        this.game = game;
-    }
+    private GameTimer gTimer;
     public void setView(View view){
         this.view = view;
     }
     public void setModel(Model model){
         this.model = model;
     }
+
+    public void startGame(int timeout, int size) {
+        //called when player hits start
+        game = new MainGame(size);
+        gTimer = new GameTimer(timeout);
+        //view.switchToDisplay
+        //view.
+    }
     public void checkSeq(Color color) {
         //stop timer
-
+        gTimer.cancelTimer();
         if(this.game.checkCurrSeq(color)){
-            //resets timer thread
-            //increment score
-            this.game.incrementScore();
-            //increment currIndex
             this.game.incrementCurrIndex();
         }else{
-            //destroy timer thread
-            //interrupt game (show end game on view)
-            //call view to enter name (send name will take the rest of the work
-            //dereferences game instance
+           stopGame();
         }
     }
     public void sendData(String name) {
@@ -39,5 +35,7 @@ public class Controler {
     public int getScores() {
         return game.getScore();
     }
+    public void stopGame(){
 
+    }
 }

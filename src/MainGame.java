@@ -6,7 +6,7 @@ public class MainGame {
     private ArrayList<Color> colorSeq;
     private int currIndex;
     private Controler ctrl;
-    public MainGame(int size, int timeout) {
+    public MainGame(int size) {
         currIndex = 0;
         colorSeq = new ArrayList<>();
         createSequence(size);
@@ -26,10 +26,15 @@ public class MainGame {
     }
 
     public boolean checkCurrSeq(Color color) {
-        return color.equals(colorSeq.get(currIndex));
+        boolean ret =  color.equals(colorSeq.get(currIndex));
+        if(currIndex == colorSeq.size()){
+            incrementScore();
+            currIndex=0;
+        }
+        return ret;
     }
 
-    public void incrementScore() {
+    private void incrementScore() {
         score++;
     }
     public void incrementCurrIndex(){
