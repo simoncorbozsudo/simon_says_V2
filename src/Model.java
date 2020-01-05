@@ -1,5 +1,5 @@
 public class Model {
-
+    private Controler ctrl;
     /**
      *
      * @param name
@@ -13,6 +13,9 @@ public class Model {
     public String getScores() {
         // TODO - implement Model.getScores
         throw new UnsupportedOperationException();
+    }
+    public void setCtrl(Controler ctrl){
+        this.ctrl = ctrl;
     }
 
 }

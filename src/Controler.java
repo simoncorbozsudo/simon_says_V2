@@ -1,50 +1,47 @@
+import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Controler {
     private MainGame game;
-
-    public Controler(){
-
-    }
+    private View view;
+    private Model model;
     public void setMainGame(MainGame game){
-
+        //called when user clicks on start
+        this.game = game;
     }
-    public void signalStopTimer() {
-        // TODO - implement Controler.signalStopTimer
-        throw new UnsupportedOperationException();
+    public void setView(View view){
+        this.view = view;
     }
-
+    public void setModel(Model model){
+        this.model = model;
+    }
     /**
      *
-     * @param Color
+     * @param color
      */
-    public void checkSeq(int Color) {
-        // TODO - implement Controler.checkSeq
+    public void checkSeq(Color color) {
+        //stop timer
 
-        throw new UnsupportedOperationException();
+        if(this.game.checkCurrSeq(color)){
+            //resets timer thread
+            //increment score
+            this.game.incrementScore();
+            //increment currIndex
+            this.game.incrementCurrIndex();
+        }else{
+            //destroy timer thread
+            //interrupt game (show end game on view)
+            //call view to enter name (send name will take the rest of the work
+            //dereferences game instance
+        }
     }
+    public void sendName(String name) {
 
-    /**
-     *
-     * @param String
-     */
-    public void sendName(int String) {
-        // TODO - implement Controler.sendName
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     *
-     * @param initSize
-     * @param TimeOut
-     * @param VitessSeq
-     */
-    public boolean appliqueModification(int initSize, int TimeOut, int VitessSeq) {
-        // TODO - implement Controler.appliqueModification
-        throw new UnsupportedOperationException();
     }
 
     public int getScores() {
-        // TODO - implement Controler.getScores
-        throw new UnsupportedOperationException();
+        return game.getScore();
     }
 
 }

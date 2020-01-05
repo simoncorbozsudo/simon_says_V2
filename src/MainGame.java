@@ -1,10 +1,8 @@
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Timer;
 public class MainGame {
 
     private int score;
-    private Timer timer;
     private ArrayList<Color> colorSeq;
     private int currIndex;
     private Controler ctrl;
@@ -27,17 +25,18 @@ public class MainGame {
         if(rand == 3)colorSeq.add(Color.GREEN);
     }
 
-    private boolean checkCurrSeq(Color color) {
+    public boolean checkCurrSeq(Color color) {
         return color.equals(colorSeq.get(currIndex));
     }
 
-    private void incrementScore() {
+    public void incrementScore() {
         score++;
     }
-
-    public void gameLoop(){
-
+    public void incrementCurrIndex(){
+        currIndex++;
     }
+
+
     public int getScore() {
         return this.score;
     }
@@ -45,10 +44,4 @@ public class MainGame {
     public void setCtrl(Controler controler){
         this.ctrl = controler;
     }
-
-    public boolean appliqueModification(int initSize, int TimeOut, int VitessSeq) {
-        // TODO - implement MainGame.appliqueModification
-        throw new UnsupportedOperationException();
-    }
-
 }
