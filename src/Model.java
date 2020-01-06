@@ -6,33 +6,22 @@ public class Model {
     private BufferedReader fileReader;
     private BufferedWriter fileWriter;
 
-    public Model(){
+    public Model() {
         scoreFile = new File((System.getProperty("user.home")
                 + "/Desktop/scores.txt").replace("\\", "/"));
     }
 
     /**
      * Method to save the score and player name of the last game
-     * @param name : name of the player
+     *
+     * @param name  : name of the player
      * @param score : the score realised by the player
      */
     public void recordData(String name, int score) {
         String tmpScores = "";
-        if(scoreFile.exists()){
-            try {
-                fileReader = new BufferedReader(new FileReader(scoreFile));
-                String tmp = fileReader.readLine();
-                while(tmp != null){
-                    tmpScores += tmp + "\n";
-                    tmp = fileReader.readLine();
-                }
-                tmpScores += name + " : " + score;
-                fileReader.close();
-            } catch (IOException e){
-                System.err.println("An IOEXception happened.");
-                e.printStackTrace();
-            }
-        }else{
+        if (scoreFile.exists()) {
+            tmpScores += getData();
+        } else {
             tmpScores = name + " : " + score;
         }
 
@@ -49,24 +38,25 @@ public class Model {
 
     /**
      * Method to get all the saved scored
+     *
      * @return String containing all scores separated by '\n'
      */
-    public String getData(){
+    public String getData() {
         String tmpScores = "";
-        if(scoreFile.exists()){
+        if (scoreFile.exists()) {
             try {
                 fileReader = new BufferedReader(new FileReader(scoreFile));
                 String tmp = fileReader.readLine();
-                while(tmp != null){
+                while (tmp != null) {
                     tmpScores += tmp + "\n";
                     tmp = fileReader.readLine();
                 }
                 fileReader.close();
-            } catch (IOException e){
+            } catch (IOException e) {
                 System.err.println("An IOEXception happened.");
                 e.printStackTrace();
             }
-        }else{
+        } else {
             tmpScores = "No scores have been done yet.";
         }
         return tmpScores;
@@ -74,6 +64,10 @@ public class Model {
 
     public void setCtrl(Controler ctrl) {
         this.ctrl = ctrl;
+    }
+
+    private String sortScores(String scores){
+        String scoresList[] = scores.split();
     }
 
 }
