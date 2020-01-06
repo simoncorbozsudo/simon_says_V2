@@ -17,7 +17,8 @@ public class Controler {
         //called when player hits start
         game = new MainGame(size);
         gTimer = new GameTimer(timeout);
-        view.displayColorSequence(game.getColorSeq());
+        gTimer.setCtrl(this);
+        view.displayColorSequence(game.getColorSeq()).play();
         gTimer.startTimer();
     }
 
@@ -25,11 +26,11 @@ public class Controler {
         //stop timer
         gTimer.cancelTimer();
         if(this.game.checkCurrSeq(color)){
-            this.game.incrementScore();
-            if(this.game.getCurrIndex() == this.game.getColorSeq().size()){
+            if(this.game.getCurrIndex() == this.game.getColorSeq().size()-1){
+                this.game.incrementScore();
                 this.game.setCurrIndex(0);
                 this.game.addToColorSeq();
-                view.displayColorSequence(game.getColorSeq());
+                view.displayColorSequence(game.getColorSeq()).play();
             }else{
                 this.game.incrementCurrIndex();
             }
@@ -42,8 +43,12 @@ public class Controler {
         model.recordData(name,game.getScore());
     }
 
+    public String getData(){
+        return model.getData();
+    }
+
     public void stopGame(){
         //disable onclick method for game
-       // view.displaynameasking
+        view.displaynameasking();
     }
 }
