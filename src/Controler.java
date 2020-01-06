@@ -17,6 +17,7 @@ public class Controler {
         //called when player hits start
         game = new MainGame(size);
         gTimer = new GameTimer(timeout);
+        gTimer.setCtrl(this);
         view.displayColorSequence(game.getColorSeq());
         gTimer.startTimer();
     }
@@ -27,14 +28,18 @@ public class Controler {
         if(this.game.checkCurrSeq(color)){
             this.game.incrementScore();
             if(this.game.getCurrIndex() == this.game.getColorSeq().size()){
+                System.out.println("we good ");
+                this.game.incrementScore();
                 this.game.setCurrIndex(0);
                 this.game.addToColorSeq();
                 view.displayColorSequence(game.getColorSeq());
             }else{
+                System.out.println("yeet boi");
                 this.game.incrementCurrIndex();
             }
             gTimer.startTimer();
         }else{
+            System.out.println("false choice");
            stopGame();
         }
     }

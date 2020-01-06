@@ -10,8 +10,6 @@ public class View {
      * @param ColorSeq
      */
     public void displayColorSequence(ArrayList<Color> ColorSeq) {
-        // TODO - implement View.displayColorSequence
-        throw new UnsupportedOperationException();
     }
 
     public void onClick() {

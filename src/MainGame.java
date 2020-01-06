@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.util.ArrayList;
 public class MainGame {
-
     private int score;
     private ArrayList<Color> colorSeq;
     private int currIndex;
