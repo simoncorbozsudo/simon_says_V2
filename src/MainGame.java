@@ -5,6 +5,7 @@ public class MainGame {
     private ArrayList<Color> colorSeq;
     private int currIndex;
     private Controler ctrl;
+
     public MainGame(int size) {
         currIndex = 0;
         colorSeq = new ArrayList<>();

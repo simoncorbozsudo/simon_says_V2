@@ -22,8 +22,7 @@ public class GameTimer {
         }
     }
     public void cancelTimer(){
-        System.out.println("timerCancelled");
-        this.timer.cancel();
+        timer.cancel();
     }
     public void setCtrl(Controler ctrl){
         this.ctrl = ctrl;

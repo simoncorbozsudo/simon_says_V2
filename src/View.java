@@ -112,11 +112,9 @@ public class View extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Simon says");
-        MainGame mGame = new MainGame(4);
-        Controler ctrl = new Controler();
+        ctrl = new Controler();
         ctrl.setView(this);
         Model model = new Model();
-        mGame.setCtrl(ctrl);
         jeu.getChildren().addAll(vert, bleu, jaune, rouge);
         Menu mOption = new Menu("_Options");
         mBar.getMenus().add(mOption);
@@ -131,7 +129,6 @@ public class View extends Application {
         readyForInput = new SimpleBooleanProperty(false);
         newGame.setOnAction(event -> {
             ctrl.startGame(2,4);
-
         });
         vert.setOnAction(event -> {
             ctrl.checkSeq(Color.GREEN);

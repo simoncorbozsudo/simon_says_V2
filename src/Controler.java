@@ -1,5 +1,9 @@
+import javafx.application.Platform;
+import javafx.animation.Timeline;
 import java.awt.*;
 import java.util.ArrayList;
+
+import static javafx.application.Platform.*;
 
 public class Controler {
     private MainGame game;
@@ -18,8 +22,9 @@ public class Controler {
         game = new MainGame(size);
         gTimer = new GameTimer(timeout);
         gTimer.setCtrl(this);
-        view.displayColorSequence(game.getColorSeq()).play();
-        gTimer.startTimer();
+        Timeline tl = view.displayColorSequence(game.getColorSeq());
+        tl.play();
+        tl.setOnFinished(event -> gTimer.startTimer());
     }
 
     public void checkSeq(Color color) {
@@ -31,10 +36,11 @@ public class Controler {
                 this.game.setCurrIndex(0);
                 this.game.addToColorSeq();
                 view.displayColorSequence(game.getColorSeq()).play();
+                gTimer.startTimer();
             }else{
                 this.game.incrementCurrIndex();
+                gTimer.startTimer();
             }
-            gTimer.startTimer();
         }else{
            stopGame();
         }
@@ -49,6 +55,13 @@ public class Controler {
 
     public void stopGame(){
         //disable onclick method for game
-        view.displaynameasking();
+        runLater(
+                () -> {
+                    view.displaynameasking();                }
+        );
+
+    }
+    public void startTimer(){
+        gTimer.startTimer();
     }
 }
