@@ -1,14 +1,46 @@
+import javax.xml.bind.SchemaOutputResolver;
 import java.io.*;
+import java.util.Objects;
 
 public class Model {
     private Controler ctrl;
-    private File scoreFile;
+    private File scoreFile= new File((System.getProperty("user.home")
+            + "/Desktop/scores.txt").replace("\\", "/"));;
     private BufferedReader fileReader;
     private BufferedWriter fileWriter;
 
-    public Model() {
-        scoreFile = new File((System.getProperty("user.home")
-                + "/Desktop/scores.txt").replace("\\", "/"));
+    private class Score{
+        private String name;
+        private int score;
+
+        public int getScore() {
+            return score;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public void setScore(int score) {
+            this.score = score;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return false;
+            if (o == null || getClass() != o.getClass()) return false;
+            Score score1 = (Score) o;
+            return score == score1.score;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(name, score);
+        }
     }
 
     /**
@@ -20,7 +52,7 @@ public class Model {
     public void recordData(String name, int score) {
         String tmpScores = "";
         if (scoreFile.exists()) {
-            tmpScores += getData();
+            tmpScores += getData() + name + " : " + score;
         } else {
             tmpScores = name + " : " + score;
         }
@@ -64,10 +96,6 @@ public class Model {
 
     public void setCtrl(Controler ctrl) {
         this.ctrl = ctrl;
-    }
-
-    private String sortScores(String scores){
-        String scoresList[] = scores.split();
     }
 
 }
