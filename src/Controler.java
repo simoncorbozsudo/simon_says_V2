@@ -2,7 +2,6 @@ import javafx.application.Platform;
 import javafx.animation.Timeline;
 import java.awt.*;
 import java.util.ArrayList;
-
 import static javafx.application.Platform.*;
 
 public class Controler {
@@ -35,7 +34,9 @@ public class Controler {
                 this.game.incrementScore();
                 this.game.setCurrIndex(0);
                 this.game.addToColorSeq();
-                view.displayColorSequence(game.getColorSeq()).play();
+                Timeline t = view.displayColorSequence(game.getColorSeq());
+                t.play();
+                t.setOnFinished(event->gTimer.startTimer());
                 gTimer.startTimer();
             }else{
                 this.game.incrementCurrIndex();
