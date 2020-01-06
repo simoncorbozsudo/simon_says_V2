@@ -68,4 +68,11 @@ public class Controler {
     public void startTimer(){
         gTimer.startTimer();
     }
+    public void stopGameFromButton(){
+        Timeline t = view.displayColorSequence(game.getColorSeq());
+        t.stop();
+        view.resetcolor();
+        if(gTimer != null) gTimer.cancelTimer();
+        stopGame();
+    }
 }
