@@ -8,6 +8,5 @@ public class Main {
         model.setCtrl(ctrl);
         view.setCtrl(ctrl);
         //call view to display menu
-
     }
 }

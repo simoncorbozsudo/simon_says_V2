@@ -1,11 +1,15 @@
+import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class View {
     private Controler ctrl;
+    private int seqSpeed;
     /**
      *
      * @param ColorSeq
-     * @param seqSpeed
      */
-    public void displayColorSequence(int ColorSeq, int seqSpeed) {
+    public void displayColorSequence(ArrayList<Color> ColorSeq) {
         // TODO - implement View.displayColorSequence
         throw new UnsupportedOperationException();
     }
