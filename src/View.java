@@ -50,6 +50,7 @@ public class View extends Application {
     private HBox bleuVertHbox = new HBox();
     private HBox jauneRougeHbox = new HBox();
     private Button showresultat = new Button("Affiche résultat");
+    private Button stopGame = new Button("Stoper jeu");
     private HBox botHbox = new HBox();
     private Button newGame = new Button("New Game");
     private Controler ctrl;
@@ -125,6 +126,7 @@ public class View extends Application {
         Optional<String> textIn = inDialog.showAndWait();
         showresultat.setDisable(false);
         newGame.setDisable(false);
+        stopGame.setDisable(true);
         if (textIn.isPresent()) {
            return textIn.get();
         }
@@ -143,6 +145,7 @@ public class View extends Application {
         jaune.setDisable(state);
         rouge.setDisable(state);
         bleu.setDisable(state);
+        stopGame.setDisable(state);
     }
     @Override
     public void init() {
@@ -209,8 +212,13 @@ public class View extends Application {
         jauneRougeHbox.getChildren().addAll(textAJaune, textARouge);
         rightVbox.getChildren().addAll(bleuVertHbox, jauneRougeHbox);
         botHbox.getChildren().add(showresultat);
+        stopGame.setDisable(true);
+        botHbox.getChildren().add(stopGame);
         showresultat.setOnAction(event -> {
             displayResult(ctrl.getData());
+        });
+        stopGame.setOnAction(event -> {
+            ctrl.stopGameFromButton();
         });
         root.setTop(mBar);
         root.setCenter(jeu);
@@ -223,6 +231,7 @@ public class View extends Application {
             ctrl.startGame(tempUserValue,tailleSequenceVal);
             showresultat.setDisable(true);
             newGame.setDisable(true);
+
         });
         vert.setOnAction(event -> {
             ctrl.checkSeq(Color.GREEN);
