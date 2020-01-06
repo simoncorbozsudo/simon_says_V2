@@ -14,10 +14,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -30,8 +32,15 @@ public class View extends Application {
     private Button bleu = new Button("Bleu");
     private Button jaune = new Button("Jaune");
     private Button rouge = new Button("Rouge");
-    private TextArea textSeq = new TextArea();
+    private TextArea textABleu = new TextArea();
+    private TextArea textAVert = new TextArea();
+    private TextArea textARouge = new TextArea();
+    private TextArea textAJaune = new TextArea();
     private MenuBar mBar = new MenuBar();
+    private VBox rightVbox = new VBox();
+    private HBox bleuVertHbox = new HBox();
+    private HBox jauneRougeHbox = new HBox();
+    private Button showresultat = new Button("Affiche résultat");
     private HBox botHbox = new HBox();
     private Button newGame = new Button("New Game");
     private Controler ctrl;
@@ -50,16 +59,37 @@ public class View extends Application {
         for (Color msg : color) {
             System.out.println(msg);
             timeline.getKeyFrames().add(new KeyFrame(frame, e -> {
-                    textSeq.setStyle("-fx-control-inner-background:#FFFFFF");
-                    if(Color.BLUE == msg)textSeq.setStyle("-fx-control-inner-background:#005eff");
-                    else if (Color.RED == msg)textSeq.setStyle("-fx-control-inner-background:#f71b1b");
-                    else if (Color.YELLOW == msg) textSeq.setStyle("-fx-control-inner-background:#fbff00");
-                    else if (Color.GREEN == msg) textSeq.setStyle("-fx-control-inner-background:#00ff15");
-                    else textSeq.setStyle("-fx-control-inner-background:#FFFFFF");
-                }));
+                if (Color.BLUE == msg) {
+                    textABleu.setStyle("-fx-control-inner-background:#0095ff");
+                    textARouge.setStyle("-fx-control-inner-background:#cf0011");
+                    textAJaune.setStyle("-fx-control-inner-background:#ced117");
+                    textAVert.setStyle("-fx-control-inner-background:#1dbf2a");
+                } else if (Color.RED == msg) {
+                    textARouge.setStyle("-fx-control-inner-background:#ff0015");
+                    textAJaune.setStyle("-fx-control-inner-background:#ced117");
+                    textAVert.setStyle("-fx-control-inner-background:#1dbf2a");
+                    textABleu.setStyle("-fx-control-inner-background:#005eff");
+                } else if (Color.YELLOW == msg) {
+                    textAJaune.setStyle("-fx-control-inner-background:#fbff00");
+                    textARouge.setStyle("-fx-control-inner-background:#cf0011");
+                    textAVert.setStyle("-fx-control-inner-background:#1dbf2a");
+                    textABleu.setStyle("-fx-control-inner-background:#005eff");
+                } else if (Color.GREEN == msg) {
+                    textAVert.setStyle("-fx-control-inner-background:#00ff15");
+                    textARouge.setStyle("-fx-control-inner-background:#cf0011");
+                    textABleu.setStyle("-fx-control-inner-background:#005eff");
+                    textAJaune.setStyle("-fx-control-inner-background:#ced117");
+                }else{
+                    textABleu.setStyle("-fx-control-inner-background:#005eff");
+                    textARouge.setStyle("-fx-control-inner-background:#cf0011");
+                    textAJaune.setStyle("-fx-control-inner-background:#ced117");
+                    textAVert.setStyle("-fx-control-inner-background:#1dbf2a");
+                }
+            }));
             frame = frame.add(delayBetweenMessages);
 
         }
+        resetcolor();
         timeline.statusProperty().addListener((obs, oldStatus, newStatus) -> {
             readyForInput.set(newStatus != Animation.Status.RUNNING);
             if (newStatus != Animation.Status.RUNNING) {
@@ -70,7 +100,12 @@ public class View extends Application {
     }
 
 
-
+    public void resetcolor(){
+        textABleu.setStyle("-fx-control-inner-background:#005eff");
+        textARouge.setStyle("-fx-control-inner-background:#cf0011");
+        textAJaune.setStyle("-fx-control-inner-background:#ced117");
+        textAVert.setStyle("-fx-control-inner-background:#1dbf2a");
+    }
 
     public void onClick() {
         // TODO - implement View.onClick
@@ -82,7 +117,7 @@ public class View extends Application {
         if (textIn.isPresent()) {
            return textIn.get();
         }
-        return "rien";
+        return "Guest";
     }
 
     public void afficheParametreDifficulte() {
@@ -113,8 +148,10 @@ public class View extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Simon says");
         ctrl = new Controler();
-        ctrl.setView(this);
         Model model = new Model();
+        ctrl.setView(this);
+        ctrl.setModel(model);
+
         jeu.getChildren().addAll(vert, bleu, jaune, rouge);
         Menu mOption = new Menu("_Options");
         mBar.getMenus().add(mOption);
@@ -122,13 +159,25 @@ public class View extends Application {
         inDialog.setTitle("A Text-Input Dialog");
         inDialog.setHeaderText("Account Login (or Guest Access)");
         inDialog.setContentText("Username :");
+        textABleu.setStyle("-fx-control-inner-background:#005eff");
+        textARouge.setStyle("-fx-control-inner-background:#cf0011");
+        textAJaune.setStyle("-fx-control-inner-background:#ced117");
+        textAVert.setStyle("-fx-control-inner-background:#1dbf2a");
+        bleuVertHbox.getChildren().addAll(textABleu, textAVert);
+        jauneRougeHbox.getChildren().addAll(textAJaune, textARouge);
+        rightVbox.getChildren().addAll(bleuVertHbox, jauneRougeHbox);
+        botHbox.getChildren().add(showresultat);
+        showresultat.setOnAction(event -> {
+
+            System.out.println(ctrl.getData());
+        });
         root.setTop(mBar);
         root.setCenter(jeu);
-        root.setLeft(textSeq);
+        root.setLeft(rightVbox);
         root.setBottom(botHbox);
         readyForInput = new SimpleBooleanProperty(false);
         newGame.setOnAction(event -> {
-            ctrl.startGame(2,4);
+            ctrl.startGame(10,4);
         });
         vert.setOnAction(event -> {
             ctrl.checkSeq(Color.GREEN);

@@ -18,6 +18,7 @@ public class GameTimer {
     class Task extends TimerTask {
         public void run() {
             System.out.println("TIMER IS OVER");
+            ctrl.stopGame();
             timer.cancel(); //Terminate the timer thread
         }
     }

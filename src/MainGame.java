@@ -9,6 +9,7 @@ public class MainGame {
     public MainGame(int size) {
         currIndex = 0;
         colorSeq = new ArrayList<>();
+        score = 0;
         createSequence(size);
     }
 
