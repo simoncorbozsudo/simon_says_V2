@@ -12,8 +12,9 @@ public class Model {
     }
 
     /**
-     * @param name
-     * @param score
+     * Method to save the score and player name of the last game
+     * @param name : name of the player
+     * @param score : the score realised by the player
      */
     public void recordData(String name, int score) {
         String tmpScores = "";
@@ -44,6 +45,31 @@ public class Model {
             System.err.println("An IOEXception happened.");
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Method to get all the saved scored
+     * @return String containing all scores separated by '\n'
+     */
+    public String getData(){
+        String tmpScores = "";
+        if(scoreFile.exists()){
+            try {
+                fileReader = new BufferedReader(new FileReader(scoreFile));
+                String tmp = fileReader.readLine();
+                while(tmp != null){
+                    tmpScores += tmp + "\n";
+                    tmp = fileReader.readLine();
+                }
+                fileReader.close();
+            } catch (IOException e){
+                System.err.println("An IOEXception happened.");
+                e.printStackTrace();
+            }
+        }else{
+            tmpScores = "No scores have been done yet.";
+        }
+        return tmpScores;
     }
 
     public void setCtrl(Controler ctrl) {
