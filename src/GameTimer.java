@@ -5,7 +5,6 @@ public class GameTimer {
     private Controler ctrl;
     private int timeout;
 
-
     public GameTimer(int timeout){
         this.timeout = timeout;
     }

@@ -17,7 +17,7 @@ public class MainGame {
             addToColorSeq();
         }
     }
-    private void addToColorSeq(){
+    public void addToColorSeq(){
         int rand = (int)(Math.random() * (3 - 0 +1)) + 0;
         if(rand == 0)colorSeq.add(Color.BLUE);
         if(rand == 1)colorSeq.add(Color.YELLOW);
@@ -26,27 +26,28 @@ public class MainGame {
     }
 
     public boolean checkCurrSeq(Color color) {
-        boolean ret =  color.equals(colorSeq.get(currIndex));
-        if(currIndex == colorSeq.size()){
-            incrementScore();
-            currIndex=0;
-        }
-        return ret;
+        return color.equals(colorSeq.get(currIndex));
     }
 
-    private void incrementScore() {
+    public void incrementScore() {
         score++;
     }
     public void incrementCurrIndex(){
         currIndex++;
     }
-
-
     public int getScore() {
         return this.score;
     }
-
     public void setCtrl(Controler controler){
         this.ctrl = controler;
+    }
+    public ArrayList<Color> getColorSeq(){
+        return colorSeq;
+    }
+    public int getCurrIndex(){
+        return currIndex;
+    }
+    public void setCurrIndex(int val){
+        this.currIndex = val;
     }
 }
