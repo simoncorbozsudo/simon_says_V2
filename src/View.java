@@ -2,8 +2,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -19,13 +18,19 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Optional;
 
 
 public class View extends Application {
 
+    private DoubleProperty tempSequence = new SimpleDoubleProperty();
+    private IntegerProperty tailleSequence = new SimpleIntegerProperty();
+    private IntegerProperty tempUserProp = new SimpleIntegerProperty();
+
+    private int tempUserValue;
+    private double tempSequen ;
+    private int tailleSequenceVal;
     private BorderPane root = new BorderPane();
     private FlowPane jeu = new FlowPane();
     private Button vert = new Button("Vert");
@@ -36,6 +41,10 @@ public class View extends Application {
     private TextArea textAVert = new TextArea();
     private TextArea textARouge = new TextArea();
     private TextArea textAJaune = new TextArea();
+    private Menu tempSeq = new Menu("Temps séq");
+    private Menu tempUser = new Menu("Temps input");
+    private Menu seqInit = new Menu("Longueur séq init");
+
     private MenuBar mBar = new MenuBar();
     private VBox rightVbox = new VBox();
     private HBox bleuVertHbox = new HBox();
@@ -48,42 +57,47 @@ public class View extends Application {
     private TextField input = new TextField();
     private Popup popup = new Popup();
     private TextInputDialog inDialog = new TextInputDialog("Guest");
+    private  Alert dialog = new Alert(Alert.AlertType.INFORMATION);
+    private Slider tempSeqSlider = new Slider(0.5, 4 , 1);
+    private Slider tailleSeqsli = new Slider(2, 5 , 3);
+    private Slider tempUsersli = new Slider(1,10,5);
 
 
 
 
     public Timeline displayColorSequence(ArrayList<Color> color) {
+        tempSequen = tempSequence.getValue();
         Timeline timeline = new Timeline();
-        Duration delayBetweenMessages = Duration.seconds(1);
+        Duration delayBetweenMessages = Duration.seconds(tempSequen);
         Duration frame = delayBetweenMessages ;
         for (Color msg : color) {
             System.out.println(msg);
             timeline.getKeyFrames().add(new KeyFrame(frame, e -> {
                 if (Color.BLUE == msg) {
                     textABleu.setStyle("-fx-control-inner-background:#0095ff");
-                    textARouge.setStyle("-fx-control-inner-background:#cf0011");
-                    textAJaune.setStyle("-fx-control-inner-background:#ced117");
-                    textAVert.setStyle("-fx-control-inner-background:#1dbf2a");
+                    textARouge.setStyle("-fx-control-inner-background:#87121b");
+                    textAJaune.setStyle("-fx-control-inner-background:#808211");
+                    textAVert.setStyle("-fx-control-inner-background:#0e5914");
                 } else if (Color.RED == msg) {
                     textARouge.setStyle("-fx-control-inner-background:#ff0015");
-                    textAJaune.setStyle("-fx-control-inner-background:#ced117");
-                    textAVert.setStyle("-fx-control-inner-background:#1dbf2a");
-                    textABleu.setStyle("-fx-control-inner-background:#005eff");
+                    textAJaune.setStyle("-fx-control-inner-background:#808211");
+                    textAVert.setStyle("-fx-control-inner-background:#0e5914");
+                    textABleu.setStyle("-fx-control-inner-background:#0f47a6");
                 } else if (Color.YELLOW == msg) {
                     textAJaune.setStyle("-fx-control-inner-background:#fbff00");
-                    textARouge.setStyle("-fx-control-inner-background:#cf0011");
-                    textAVert.setStyle("-fx-control-inner-background:#1dbf2a");
-                    textABleu.setStyle("-fx-control-inner-background:#005eff");
+                    textAVert.setStyle("-fx-control-inner-background:#0e5914");
+                    textABleu.setStyle("-fx-control-inner-background:#0f47a6");
+                    textARouge.setStyle("-fx-control-inner-background:#87121b");
                 } else if (Color.GREEN == msg) {
                     textAVert.setStyle("-fx-control-inner-background:#00ff15");
-                    textARouge.setStyle("-fx-control-inner-background:#cf0011");
-                    textABleu.setStyle("-fx-control-inner-background:#005eff");
-                    textAJaune.setStyle("-fx-control-inner-background:#ced117");
+                    textABleu.setStyle("-fx-control-inner-background:#0f47a6");
+                    textARouge.setStyle("-fx-control-inner-background:#87121b");
+                    textAJaune.setStyle("-fx-control-inner-background:#808211");
                 }else{
                     textABleu.setStyle("-fx-control-inner-background:#005eff");
-                    textARouge.setStyle("-fx-control-inner-background:#cf0011");
-                    textAJaune.setStyle("-fx-control-inner-background:#ced117");
-                    textAVert.setStyle("-fx-control-inner-background:#1dbf2a");
+                    textARouge.setStyle("-fx-control-inner-background:#87121b");
+                    textAJaune.setStyle("-fx-control-inner-background:#808211");
+                    textAVert.setStyle("-fx-control-inner-background:#0e5914");
                 }
             }));
             frame = frame.add(delayBetweenMessages);
@@ -101,47 +115,43 @@ public class View extends Application {
 
 
     public void resetcolor(){
-        textABleu.setStyle("-fx-control-inner-background:#005eff");
-        textARouge.setStyle("-fx-control-inner-background:#cf0011");
-        textAJaune.setStyle("-fx-control-inner-background:#ced117");
-        textAVert.setStyle("-fx-control-inner-background:#1dbf2a");
-    }
-
-    public void onClick() {
-        // TODO - implement View.onClick
-        throw new UnsupportedOperationException();
+        textABleu.setStyle("-fx-control-inner-background:#0f47a6");
+        textARouge.setStyle("-fx-control-inner-background:#87121b");
+        textAJaune.setStyle("-fx-control-inner-background:#808211");
+        textAVert.setStyle("-fx-control-inner-background:#0e5914");
     }
 
     public String displaynameasking() {
         Optional<String> textIn = inDialog.showAndWait();
+        showresultat.setDisable(false);
+        newGame.setDisable(false);
         if (textIn.isPresent()) {
            return textIn.get();
         }
         return "Guest";
     }
 
-    public void afficheParametreDifficulte() {
-        // TODO - implement View.afficheParametreDifficulte
-        throw new UnsupportedOperationException();
+    public void displayResult(String resultat){
+        dialog.setTitle("Liste des résultats");
+        dialog.setHeaderText("Liste des résultats enregistrés :");
+        dialog.setContentText(resultat);
+        dialog.showAndWait();
     }
 
-    /**
-     * @param initSize
-     * @param TimeOut
-     * @param VitessSeq
-     */
-    public boolean appliqueModification(int initSize, int TimeOut, int VitessSeq) {
-        // TODO - implement View.appliqueModification
-        throw new UnsupportedOperationException();
+    public void disableButtons(boolean state){
+        vert.setDisable(state);
+        jaune.setDisable(state);
+        rouge.setDisable(state);
+        bleu.setDisable(state);
     }
-
-    public void displayScores() {
-        // TODO - implement View.displayScores
-        throw new UnsupportedOperationException();
-    }
-
-    public void setCtrl(Controler ctrl) {
-        this.ctrl = ctrl;
+    @Override
+    public void init() {
+        tempSequence.bind(tempSeqSlider.valueProperty());
+        tempSequen = tempSequence.getValue();
+        tailleSequence.bind(tailleSeqsli.valueProperty());
+        tailleSequenceVal = tailleSequence.getValue();
+        tempUserProp.bind(tempUsersli.valueProperty());
+        tempUserValue = tempUserProp.getValue();
     }
 
     @Override
@@ -154,22 +164,53 @@ public class View extends Application {
 
         jeu.getChildren().addAll(vert, bleu, jaune, rouge);
         Menu mOption = new Menu("_Options");
+        tempSeqSlider.setShowTickLabels(true);
+        tempSeqSlider.setShowTickMarks(true);
+        tempSeqSlider.setMajorTickUnit(1);
+        tempSeqSlider.setMinorTickCount(1);
+        tempSeqSlider.setSnapToTicks(true);
+        tempSeqSlider.setBlockIncrement(1);
+
+        tailleSeqsli.setShowTickLabels(true);
+        tailleSeqsli.setShowTickMarks(true);
+        tailleSeqsli.setMajorTickUnit(1);
+        tailleSeqsli.setMinorTickCount(1);
+        tailleSeqsli.setSnapToTicks(true);
+        tailleSeqsli.setBlockIncrement(1);
+
+        tempUsersli.setShowTickLabels(true);
+        tempUsersli.setShowTickMarks(true);
+        tempUsersli.setMajorTickUnit(1);
+        tempUsersli.setMinorTickCount(0);
+        tempUsersli.setSnapToTicks(true);
+        tempUsersli.setBlockIncrement(1);
+
+        CustomMenuItem tseqsli = new CustomMenuItem(tempSeqSlider);
+        CustomMenuItem taillseq = new CustomMenuItem(tailleSeqsli);
+        CustomMenuItem userTime = new CustomMenuItem(tempUsersli);
+        tempUser.getItems().add(userTime);
+        tempSeq.getItems().add(tseqsli);
+        seqInit.getItems().add(taillseq);
+        mOption.getItems().addAll(tempSeq,seqInit,tempUser);
         mBar.getMenus().add(mOption);
         botHbox.getChildren().add(newGame);
-        inDialog.setTitle("A Text-Input Dialog");
-        inDialog.setHeaderText("Account Login (or Guest Access)");
-        inDialog.setContentText("Username :");
-        textABleu.setStyle("-fx-control-inner-background:#005eff");
-        textARouge.setStyle("-fx-control-inner-background:#cf0011");
-        textAJaune.setStyle("-fx-control-inner-background:#ced117");
-        textAVert.setStyle("-fx-control-inner-background:#1dbf2a");
+        inDialog.setTitle("Enregistrement du score");
+        inDialog.setHeaderText("Veuillez entrer votre nom pour enregistrer votre score");
+        inDialog.setContentText("Nom :");
+        textABleu.setStyle("-fx-control-inner-background:#0f47a6");
+        textABleu.setEditable(false);
+        textARouge.setStyle("-fx-control-inner-background:#87121b");
+        textARouge.setEditable(false);
+        textAJaune.setStyle("-fx-control-inner-background:#808211");
+        textAJaune.setEditable(false);
+        textAVert.setStyle("-fx-control-inner-background:#0e5914");
+        textAVert.setEditable(false);
         bleuVertHbox.getChildren().addAll(textABleu, textAVert);
         jauneRougeHbox.getChildren().addAll(textAJaune, textARouge);
         rightVbox.getChildren().addAll(bleuVertHbox, jauneRougeHbox);
         botHbox.getChildren().add(showresultat);
         showresultat.setOnAction(event -> {
-
-            System.out.println(ctrl.getData());
+            displayResult(ctrl.getData());
         });
         root.setTop(mBar);
         root.setCenter(jeu);
@@ -177,7 +218,11 @@ public class View extends Application {
         root.setBottom(botHbox);
         readyForInput = new SimpleBooleanProperty(false);
         newGame.setOnAction(event -> {
-            ctrl.startGame(10,4);
+            tailleSequenceVal = tailleSequence.getValue();
+            tempUserValue = tempUserProp.getValue();
+            ctrl.startGame(tempUserValue,tailleSequenceVal);
+            showresultat.setDisable(true);
+            newGame.setDisable(true);
         });
         vert.setOnAction(event -> {
             ctrl.checkSeq(Color.GREEN);

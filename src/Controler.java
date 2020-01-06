@@ -21,10 +21,11 @@ public class Controler {
         game = new MainGame(size);
         gTimer = new GameTimer(timeout);
         gTimer.setCtrl(this);
+        view.disableButtons(true);
         Timeline tl = view.displayColorSequence(game.getColorSeq());
         System.out.println("fsdaf");
         tl.play();
-        tl.setOnFinished(event -> {gTimer.startTimer();});
+        tl.setOnFinished(event -> {gTimer.startTimer(); view.disableButtons(false);});
     }
 
     public void checkSeq(Color color) {
@@ -35,9 +36,10 @@ public class Controler {
                 this.game.incrementScore();
                 this.game.setCurrIndex(0);
                 this.game.addToColorSeq();
+                view.disableButtons(true);
                 Timeline t = view.displayColorSequence(game.getColorSeq());
                 t.play();
-                t.setOnFinished(event->{gTimer.startTimer();});
+                t.setOnFinished(event->{gTimer.startTimer(); view.disableButtons(false);});
             }else{
                 gTimer.startTimer();
                 this.game.incrementCurrIndex();

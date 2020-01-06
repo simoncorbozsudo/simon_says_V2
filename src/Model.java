@@ -1,17 +1,24 @@
-import javax.xml.bind.SchemaOutputResolver;
 import java.io.*;
+import java.util.Comparator;
 import java.util.Objects;
+import java.util.Arrays;
 
 public class Model {
     private Controler ctrl;
-    private File scoreFile= new File((System.getProperty("user.home")
-            + "/Desktop/scores.txt").replace("\\", "/"));;
+    private File scoreFile = new File((System.getProperty("user.home")
+            + "/Desktop/scores.txt").replace("\\", "/"));
+    ;
     private BufferedReader fileReader;
     private BufferedWriter fileWriter;
 
-    private class Score{
+    private class Score {
         private String name;
         private int score;
+
+        public Score(String name, int score){
+            this.name = name;
+            this.score = score;
+        }
 
         public int getScore() {
             return score;
@@ -41,6 +48,20 @@ public class Model {
         public int hashCode() {
             return Objects.hash(name, score);
         }
+
+        @Override
+        public String toString() {
+            return name + ":" + score;
+        }
+    }
+
+    private class SortByScore implements Comparator<Score>{
+        @Override
+        public int compare(Score o1, Score o2) {
+            if(o1.getScore() < o2.getScore()) return 1;
+            if(o1.getScore() > o2.getScore()) return -1;
+            return 0;
+        }
     }
 
     /**
@@ -52,11 +73,11 @@ public class Model {
     public void recordData(String name, int score) {
         String tmpScores = "";
         if (scoreFile.exists()) {
-            tmpScores += getData() + name + " : " + score;
+            tmpScores += getData() + name + ":" + score;
         } else {
-            tmpScores = name + " : " + score;
+            tmpScores = name + ":" + score;
         }
-
+        tmpScores = sortScores(tmpScores);
         try {
             fileWriter = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream(scoreFile), "utf-8"));
@@ -91,11 +112,33 @@ public class Model {
         } else {
             tmpScores = "No scores have been done yet.";
         }
-        return tmpScores;
+        return sortScores(tmpScores);
     }
 
     public void setCtrl(Controler ctrl) {
         this.ctrl = ctrl;
+    }
+
+    private String sortScores(String scores) {
+        String tmpList[] = scores.split(":|\n");
+        Score[] scoresList = new Score[tmpList.length/2];
+
+        for (int i = 0; i < scoresList.length; i++) {
+            scoresList[i] = new Score(tmpList[2 * i], Integer.parseInt(tmpList[2 * i + 1]));
+        }
+
+        Arrays.sort(scoresList, new SortByScore());
+
+        String tmp = "";
+        for (int i = 0; i < scoresList.length; i++) {
+            tmp += scoresList[i] + "\n";
+        }
+        return tmp;
+    }
+
+    public static void main(String[] args) {
+        Model mdl = new Model();
+        mdl.recordData("Ahmed", 50);
     }
 
 }
