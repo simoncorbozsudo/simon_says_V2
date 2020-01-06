@@ -1,15 +1,77 @@
-import java.awt.*;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
-public class View {
+import java.awt.*;
+
+
+public class View extends Application {
+
+    private BorderPane root = new BorderPane();
+    private FlowPane jeu = new FlowPane();
+    private Button vert = new Button("Vert");
+    private Button bleu = new Button("Bleu");
+    private Button jaune = new Button("Jaune");
+    private Button rouge = new Button("Rouge");
+    private TextArea textSeq = new TextArea();
+    private MenuBar mBar = new MenuBar();
+    private HBox botHbox = new HBox();
+    private Button newGame = new Button("New Game");
     private Controler ctrl;
-    private int seqSpeed;
-    /**
-     *
-     * @param ColorSeq
-     */
-    public void displayColorSequence(ArrayList<Color> ColorSeq) {
+    private BooleanProperty readyForInput ;
+    private TextField input = new TextField();
+
+
+
+
+    private Timeline createTimeline(String[] messages) {
+        Timeline timeline = new Timeline();
+        Duration delayBetweenMessages = Duration.seconds(0.5);
+        Duration frame = delayBetweenMessages ;
+        for (String msg : messages) {
+            timeline.getKeyFrames().add(new KeyFrame(frame, e -> {
+                switch (msg){
+                    case "bleu": textSeq.setStyle("-fx-control-inner-background:#005eff");
+                        break;
+                    case "rouge": textSeq.setStyle("-fx-control-inner-background:#f71b1b");
+                        break;
+                    case "jaune": textSeq.setStyle("-fx-control-inner-background:#fbff00");
+                        break;
+                    case "vert" : textSeq.setStyle("-fx-control-inner-background:#00ff15");
+                        break;
+                    default: textSeq.setStyle("-fx-control-inner-background:#FFFFFF");
+                }
+            }));
+            frame = frame.add(delayBetweenMessages);
+
+        }
+        timeline.statusProperty().addListener((obs, oldStatus, newStatus) -> {
+            readyForInput.set(newStatus != Animation.Status.RUNNING);
+            if (newStatus != Animation.Status.RUNNING) {
+                input.requestFocus();
+            }
+        });
+        return timeline ;
+    }
+
+
+    public void setColor(Button bouton, String color) {
+        bouton.setStyle("-fx-background-color: " + color);
     }
 
     public void onClick() {
@@ -28,7 +90,6 @@ public class View {
     }
 
     /**
-     *
      * @param initSize
      * @param TimeOut
      * @param VitessSeq
@@ -42,7 +103,52 @@ public class View {
         // TODO - implement View.displayScores
         throw new UnsupportedOperationException();
     }
-    public void setCtrl(Controler ctrl){
+
+    public void setCtrl(Controler ctrl) {
         this.ctrl = ctrl;
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setTitle("Simon says");
+        MainGame mGame = new MainGame(4);
+        Controler ctrl = new Controler();
+        Model model = new Model();
+        mGame.setCtrl(ctrl);
+        jeu.getChildren().addAll(vert, bleu, jaune, rouge);
+        Menu mOption = new Menu("_Options");
+        mBar.getMenus().add(mOption);
+        botHbox.getChildren().add(newGame);
+        root.setTop(mBar);
+        root.setCenter(jeu);
+        root.setLeft(textSeq);
+        root.setBottom(botHbox);
+        readyForInput = new SimpleBooleanProperty(false);
+        newGame.setOnAction(event -> {
+            ctrl.startGame(2,4);
+            String[] seq = {"rouge", "vert", "bleu", "jaune", "end"};
+
+            createTimeline(seq).play();
+
+        });
+        vert.setOnAction(event -> {
+            ctrl.checkSeq(Color.GREEN);
+        });
+        jaune.setOnAction(event -> {
+            ctrl.checkSeq(Color.YELLOW);
+        });
+        rouge.setOnAction(event -> {
+            ctrl.checkSeq(Color.RED);
+        });
+        bleu.setOnAction(event -> {
+            ctrl.checkSeq(Color.BLUE);
+        });
+
+
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+
     }
 }
