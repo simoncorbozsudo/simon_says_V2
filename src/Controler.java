@@ -18,7 +18,7 @@ public class Controler {
         game = new MainGame(size);
         gTimer = new GameTimer(timeout);
         gTimer.setCtrl(this);
-        view.displayColorSequence(game.getColorSeq());
+        view.displayColorSequence(game.getColorSeq()).play();
         gTimer.startTimer();
     }
 
@@ -26,20 +26,16 @@ public class Controler {
         //stop timer
         gTimer.cancelTimer();
         if(this.game.checkCurrSeq(color)){
-            this.game.incrementScore();
-            if(this.game.getCurrIndex() == this.game.getColorSeq().size()){
-                System.out.println("we good ");
+            if(this.game.getCurrIndex() == this.game.getColorSeq().size()-1){
                 this.game.incrementScore();
                 this.game.setCurrIndex(0);
                 this.game.addToColorSeq();
-                view.displayColorSequence(game.getColorSeq());
+                view.displayColorSequence(game.getColorSeq()).play();
             }else{
-                System.out.println("yeet boi");
                 this.game.incrementCurrIndex();
             }
             gTimer.startTimer();
         }else{
-            System.out.println("false choice");
            stopGame();
         }
     }
@@ -47,8 +43,12 @@ public class Controler {
         model.recordData(name,game.getScore());
     }
 
+    public String getData(){
+        return model.getData();
+    }
+
     public void stopGame(){
         //disable onclick method for game
-       // view.displaynameasking
+        view.displaynameasking();
     }
 }

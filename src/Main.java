@@ -1,9 +1,8 @@
-import java.awt.*;
-import java.util.Scanner;
+import javafx.application.Application;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
+        Application.launch(View.class, args);
         Controler ctrl = new Controler();
         Model model = new Model();
         View view = new View();
@@ -12,8 +11,5 @@ public class Main {
         model.setCtrl(ctrl);
         view.setCtrl(ctrl);
         //call view to display menu
-        ctrl.startGame(1,100);
-        ctrl.checkSeq(Color.red);
     }
-
 }

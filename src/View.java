@@ -14,10 +14,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Optional;
 
 
 public class View extends Application {
@@ -35,28 +37,26 @@ public class View extends Application {
     private Controler ctrl;
     private BooleanProperty readyForInput ;
     private TextField input = new TextField();
+    private Popup popup = new Popup();
+    private TextInputDialog inDialog = new TextInputDialog("Guest");
 
 
 
 
-    private Timeline createTimeline(String[] messages) {
+    public Timeline displayColorSequence(ArrayList<Color> color) {
         Timeline timeline = new Timeline();
-        Duration delayBetweenMessages = Duration.seconds(0.5);
+        Duration delayBetweenMessages = Duration.seconds(1);
         Duration frame = delayBetweenMessages ;
-        for (String msg : messages) {
+        for (Color msg : color) {
+            System.out.println(msg);
             timeline.getKeyFrames().add(new KeyFrame(frame, e -> {
-                switch (msg){
-                    case "bleu": textSeq.setStyle("-fx-control-inner-background:#005eff");
-                        break;
-                    case "rouge": textSeq.setStyle("-fx-control-inner-background:#f71b1b");
-                        break;
-                    case "jaune": textSeq.setStyle("-fx-control-inner-background:#fbff00");
-                        break;
-                    case "vert" : textSeq.setStyle("-fx-control-inner-background:#00ff15");
-                        break;
-                    default: textSeq.setStyle("-fx-control-inner-background:#FFFFFF");
-                }
-            }));
+                    textSeq.setStyle("-fx-control-inner-background:#FFFFFF");
+                    if(Color.BLUE == msg)textSeq.setStyle("-fx-control-inner-background:#005eff");
+                    else if (Color.RED == msg)textSeq.setStyle("-fx-control-inner-background:#f71b1b");
+                    else if (Color.YELLOW == msg) textSeq.setStyle("-fx-control-inner-background:#fbff00");
+                    else if (Color.GREEN == msg) textSeq.setStyle("-fx-control-inner-background:#00ff15");
+                    else textSeq.setStyle("-fx-control-inner-background:#FFFFFF");
+                }));
             frame = frame.add(delayBetweenMessages);
 
         }
@@ -70,18 +70,19 @@ public class View extends Application {
     }
 
 
-    public void setColor(Button bouton, String color) {
-        bouton.setStyle("-fx-background-color: " + color);
-    }
+
 
     public void onClick() {
         // TODO - implement View.onClick
         throw new UnsupportedOperationException();
     }
 
-    public String askPlayerName() {
-        // TODO - implement View.askPlayerName
-        throw new UnsupportedOperationException();
+    public String displaynameasking() {
+        Optional<String> textIn = inDialog.showAndWait();
+        if (textIn.isPresent()) {
+           return textIn.get();
+        }
+        return "rien";
     }
 
     public void afficheParametreDifficulte() {
@@ -113,12 +114,16 @@ public class View extends Application {
         primaryStage.setTitle("Simon says");
         MainGame mGame = new MainGame(4);
         Controler ctrl = new Controler();
+        ctrl.setView(this);
         Model model = new Model();
         mGame.setCtrl(ctrl);
         jeu.getChildren().addAll(vert, bleu, jaune, rouge);
         Menu mOption = new Menu("_Options");
         mBar.getMenus().add(mOption);
         botHbox.getChildren().add(newGame);
+        inDialog.setTitle("A Text-Input Dialog");
+        inDialog.setHeaderText("Account Login (or Guest Access)");
+        inDialog.setContentText("Username :");
         root.setTop(mBar);
         root.setCenter(jeu);
         root.setLeft(textSeq);
@@ -126,9 +131,6 @@ public class View extends Application {
         readyForInput = new SimpleBooleanProperty(false);
         newGame.setOnAction(event -> {
             ctrl.startGame(2,4);
-            String[] seq = {"rouge", "vert", "bleu", "jaune", "end"};
-
-            createTimeline(seq).play();
 
         });
         vert.setOnAction(event -> {
@@ -144,7 +146,7 @@ public class View extends Application {
             ctrl.checkSeq(Color.BLUE);
         });
 
-
+        popup.setAutoHide(true);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();
