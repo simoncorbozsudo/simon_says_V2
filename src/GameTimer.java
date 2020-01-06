@@ -11,17 +11,18 @@ public class GameTimer {
 
     public void startTimer() {
         timer = new Timer();
+        System.out.println("TIMER STARTED");
         timer.schedule(new Task(), timeout * 1000);
     }
 
     class Task extends TimerTask {
         public void run() {
-            ctrl.stopGame();
+            System.out.println("TIMER IS OVER");
             timer.cancel(); //Terminate the timer thread
         }
     }
     public void cancelTimer(){
-        this.timer.cancel();
+        timer.cancel();
     }
     public void setCtrl(Controler ctrl){
         this.ctrl = ctrl;
