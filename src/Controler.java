@@ -22,6 +22,7 @@ public class Controler {
         gTimer = new GameTimer(timeout);
         gTimer.setCtrl(this);
         Timeline tl = view.displayColorSequence(game.getColorSeq());
+        System.out.println("fsdaf");
         tl.play();
         tl.setOnFinished(event -> gTimer.startTimer());
     }
