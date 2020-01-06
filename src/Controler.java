@@ -24,7 +24,7 @@ public class Controler {
         Timeline tl = view.displayColorSequence(game.getColorSeq());
         System.out.println("fsdaf");
         tl.play();
-        tl.setOnFinished(event -> gTimer.startTimer());
+        tl.setOnFinished(event -> {gTimer.startTimer();});
     }
 
     public void checkSeq(Color color) {
@@ -37,11 +37,10 @@ public class Controler {
                 this.game.addToColorSeq();
                 Timeline t = view.displayColorSequence(game.getColorSeq());
                 t.play();
-                t.setOnFinished(event->gTimer.startTimer());
-                gTimer.startTimer();
+                t.setOnFinished(event->{gTimer.startTimer();});
             }else{
-                this.game.incrementCurrIndex();
                 gTimer.startTimer();
+                this.game.incrementCurrIndex();
             }
         }else{
            stopGame();
@@ -59,7 +58,8 @@ public class Controler {
         //disable onclick method for game
         runLater(
                 () -> {
-                    view.displaynameasking();                }
+                    sendData(view.displaynameasking());
+                }
         );
 
     }
