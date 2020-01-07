@@ -49,10 +49,10 @@ public class View extends Application {
     private VBox rightVbox = new VBox();
     private HBox bleuVertHbox = new HBox();
     private HBox jauneRougeHbox = new HBox();
-    private Button showresultat = new Button("Affiche résultat");
+    private Button showresultat = new Button("Affiche résultats");
     private Button stopGame = new Button("Stoper jeu");
     private HBox botHbox = new HBox();
-    private Button newGame = new Button("New Game");
+    private Button newGame = new Button("Nouveau jeu");
     private Controler ctrl;
     private BooleanProperty readyForInput ;
     private TextField input = new TextField();
@@ -126,7 +126,7 @@ public class View extends Application {
         Optional<String> textIn = inDialog.showAndWait();
         showresultat.setDisable(false);
         newGame.setDisable(false);
-        stopGame.setDisable(true);
+        disableButtons(true);
         if (textIn.isPresent()) {
            return textIn.get();
         }
@@ -213,6 +213,10 @@ public class View extends Application {
         rightVbox.getChildren().addAll(bleuVertHbox, jauneRougeHbox);
         botHbox.getChildren().add(showresultat);
         stopGame.setDisable(true);
+        vert.setDisable(true);
+        jaune.setDisable(true);
+        rouge.setDisable(true);
+        bleu.setDisable(true);
         botHbox.getChildren().add(stopGame);
         showresultat.setOnAction(event -> {
             displayResult(ctrl.getData());
