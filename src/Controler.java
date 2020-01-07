@@ -1,7 +1,6 @@
 import javafx.application.Platform;
 import javafx.animation.Timeline;
 import java.awt.*;
-import java.util.ArrayList;
 import static javafx.application.Platform.*;
 
 public class Controler {
@@ -64,9 +63,6 @@ public class Controler {
                 }
         );
 
-    }
-    public void startTimer(){
-        gTimer.startTimer();
     }
     public void stopGameFromButton(){
         Timeline t = view.displayColorSequence(game.getColorSeq());

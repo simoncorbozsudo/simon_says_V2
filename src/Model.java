@@ -4,7 +4,6 @@ import java.util.Objects;
 import java.util.Arrays;
 
 public class Model {
-    private Controler ctrl;
     private File scoreFile = new File((System.getProperty("user.home")
             + "/Desktop/scores.txt").replace("\\", "/"));
     ;
@@ -113,10 +112,6 @@ public class Model {
             tmpScores = "No scores have been done yet.";
         }
         return sortScores(tmpScores);
-    }
-
-    public void setCtrl(Controler ctrl) {
-        this.ctrl = ctrl;
     }
 
     private String sortScores(String scores) {
